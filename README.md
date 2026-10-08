@@ -30,7 +30,7 @@ All services run on the default Docker Compose network and use `restart: unless-
 - Docker Compose `v2+`
 - Tailscale installed and connected on the server and all client machines
 - Ports `80` and `443` open/forwarded on the host (used by Nginx Proxy Manager for reverse proxying and SSL certificate issuance)
-- A running FRP server reachable at `FRP_SERVER_ADDR` (e.g. [`nilabiru-frps`](https://github.com/andry-pebrianto/nilabiru-frps)), configured with the same token
+- A running FRP server reachable at `FRP_SERVER_ADDR` (e.g. [`nilabiru-frps`](https://github.com/NILABIRU/nilabiru-frps)), configured with the same token
 
 ---
 
@@ -39,7 +39,7 @@ All services run on the default Docker Compose network and use `restart: unless-
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/andry-pebrianto/nilabiru-core.git
+git clone https://github.com/NILABIRU/nilabiru-core.git
 cd nilabiru-core
 ```
 
@@ -55,13 +55,13 @@ Then edit `.env`:
 
 ```env
 # Tailscale
-TAILSCALE_IP=your_tailscale_ip
+TAILSCALE_IP=
 
 # FRP
-FRP_SERVER_ADDR=your_frp_server_address
-FRP_TOKEN=your_frp_token
-FRP_USER=your_frpc_dashboard_username
-FRP_PASSWORD=your_frpc_dashboard_password
+FRP_SERVER_ADDR=
+FRP_TOKEN=
+FRP_USER=
+FRP_PASSWORD=
 ```
 
 > **Note:** Never commit `.env` to version control. It is already listed in `.gitignore`.
