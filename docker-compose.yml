@@ -1,0 +1,46 @@
+services:
+  nilabiru-portainer:
+    image: portainer/portainer-ce:2.42.0
+    container_name: nilabiru-portainer
+    restart: unless-stopped
+    ports:
+      - "${TAILSCALE_IP}:9443:9443"
+      - "${TAILSCALE_IP}:8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+
+  nilabiru-nginx-proxy-manager:
+    image: "jc21/nginx-proxy-manager:2.15.1"
+    container_name: nilabiru-nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "${TAILSCALE_IP}:81:81"
+    volumes:
+      - npm-data:/data
+      - npm-letsencrypt:/etc/letsencrypt
+
+  nilabiru-frpc:
+    image: fatedier/frpc:v0.69.1
+    container_name: nilabiru-frpc
+    restart: unless-stopped
+    command: ["-c", "/etc/frp/frpc.toml"]
+    environment:
+      - FRP_SERVER_ADDR=${FRP_SERVER_ADDR}
+      - FRP_TOKEN=${FRP_TOKEN}
+      - FRP_USER=${FRP_USER}
+      - FRP_PASSWORD=${FRP_PASSWORD}
+    ports:
+      - "${TAILSCALE_IP}:7400:7400"
+    volumes:
+      - ./frpc.toml:/etc/frp/frpc.toml:ro
+    depends_on:
+      nilabiru-nginx-proxy-manager:
+        condition: service_started
+
+volumes:
+  portainer-data:
+  npm-data:
+  npm-letsencrypt:
